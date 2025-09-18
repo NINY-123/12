@@ -1,0 +1,1129 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>丹东银杏文化节 - 诚挚邀请</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#E6A65D', // 温暖的橙黄色作为主色调
+                        secondary: '#8EB69B', // 银杏叶的绿色作为辅助色
+                        accent: '#C15C5C', // 点缀色
+                        warm: {
+                            100: '#FFF8E6',
+                            200: '#FFE8B3',
+                            300: '#FFD980',
+                            400: '#FFCB4D',
+                            500: '#FFBD1A',
+                            600: '#E6A600',
+                            700: '#B37F00',
+                            800: '#805900',
+                            900: '#4D3300',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Georgia', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            .text-shadow-lg {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            .animate-sway {
+                animation: sway 8s ease-in-out infinite;
+            }
+            .animate-fall {
+                animation: fall 15s linear infinite;
+            }
+            .clip-path-slant {
+                clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            }
+            .photo-hover {
+                transition: transform 0.5s ease, box-shadow 0.5s ease;
+            }
+            .photo-hover:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            }
+            .cursor-grab {
+                cursor: grab;
+            }
+            .cursor-grabbing {
+                cursor: grabbing;
+            }
+            .img-caption {
+                transform: translateY(20px);
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+            .photo-container:hover .img-caption {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* 银杏叶飘落动画 */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0.8;
+            }
+        }
+        
+        /* 浮动动画 */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        /* 摇摆动画 */
+        @keyframes sway {
+            0% {
+                transform: rotate(-5deg);
+            }
+            50% {
+                transform: rotate(5deg);
+            }
+            100% {
+                transform: rotate(-5deg);
+            }
+        }
+        
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #FFF8E6;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #E6A65D;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D49447;
+        }
+        
+        /* 照片查看器样式 */
+        #photo-viewer {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        #photo-viewer.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* 问答选项样式 */
+        .quiz-option {
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            background-color: #FFE8B3;
+        }
+        
+        .quiz-option.correct {
+            background-color: #C6E5B3;
+            border-color: #5AA469;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #F8C4B4;
+            border-color: #E66A6A;
+        }
+    </style>
+</head>
+<body class="bg-warm-100 font-sans text-warm-800 overflow-x-hidden">
+    <!-- 装饰性银杏叶 - 可交互 -->
+    <div id="ginkgo-leaves" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- 顶部导航 -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-md z-40 transition-all duration-300" id="main-nav">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="#" class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+                        <i class="fa fa-leaf text-white"></i>
+                    </div>
+                    <span class="font-bold text-xl text-warm-800">银杏文化节</span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#details" class="text-warm-700 hover:text-primary transition-colors">节日简介</a>
+                    <a href="#activities" class="text-warm-700 hover:text-primary transition-colors">活动安排</a>
+                    <a href="#gallery" class="text-warm-700 hover:text-primary transition-colors">文化掠影</a>
+                    <a href="#register" class="text-warm-700 hover:text-primary transition-colors">立即报名</a>
+                </div>
+                
+                <button class="md:hidden text-warm-800 text-xl" id="mobile-menu-button">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div class="md:hidden hidden bg-white border-t border-warm-200" id="mobile-menu">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#details" class="text-warm-700 hover:text-primary py-2 transition-colors">节日简介</a>
+                <a href="#activities" class="text-warm-700 hover:text-primary py-2 transition-colors">活动安排</a>
+                <a href="#gallery" class="text-warm-700 hover:text-primary py-2 transition-colors">文化掠影</a>
+                <a href="#register" class="text-warm-700 hover:text-primary py-2 transition-colors">立即报名</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 邀请函头部 - 大型银杏背景图 -->
+    <header class="relative h-[100vh] min-h-[600px] overflow-hidden pt-16">
+        <div class="absolute inset-0 z-0">
+            <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/68afb6848da6432f8b7e421aeecc9a24~tplv-a9rns2rl98-image.image?rcl=2025091614311575F2C7A10BB8E642890A&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1758609080&amp;x-signature=JT4BJJ44pYQiFc4OYEdv2t8xAs8%3D" alt="丹东银杏大道全景，金黄的银杏叶覆盖道路" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-10 text-white text-center">
+            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-bold mb-6 text-shadow-lg animate-float">丹东银杏文化节</h1>
+            <p class="text-[clamp(1.2rem,4vw,2.2rem)] max-w-3xl mx-auto mb-10 text-shadow">
+                金色盛宴 · 诗意丹东 · 与您共赏
+            </p>
+            
+            <!-- 倒计时组件 -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-10 border border-white/20 shadow-xl max-w-md w-full">
+                <h3 class="text-xl mb-4">距离文化节开幕还有</h3>
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <div class="text-2xl md:text-3xl font-bold" id="days">00</div>
+                        <div class="text-sm opacity-80">天</div>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <div class="text-2xl md:text-3xl font-bold" id="hours">00</div>
+                        <div class="text-sm opacity-80">时</div>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <div class="text-2xl md:text-3xl font-bold" id="minutes">00</div>
+                        <div class="text-sm opacity-80">分</div>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <div class="text-2xl md:text-3xl font-bold" id="seconds">00</div>
+                        <div class="text-sm opacity-80">秒</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="#details" class="bg-primary hover:bg-warm-500 text-white transition-all duration-300 font-medium py-3 px-8 rounded-full shadow-lg transform hover:scale-105">
+                    了解详情 <i class="fa fa-arrow-down ml-2"></i>
+                </a>
+                <a href="#register" class="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border border-white/40 transition-all duration-300 font-medium py-3 px-8 rounded-full shadow-lg transform hover:scale-105">
+                    立即报名 <i class="fa fa-ticket ml-2"></i>
+                </a>
+            </div>
+            
+            <!-- 日期信息悬浮卡片 -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-xl">
+                <p class="text-lg"><i class="fa fa-calendar mr-2"></i> 2023年10月25日-11月15日 | 丹东市银杏大道及周边</p>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 邀请函主体内容 -->
+    <main class="container mx-auto px-4 py-16 relative z-10">
+        <!-- 节日简介 -->
+        <section id="details" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-warm-800 mb-4">金色之约，共赴美好</h2>
+                    <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-xl p-8 md:p-10 transform transition-all duration-500 hover:shadow-2xl">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/2">
+                            <img src="https://p3-search.byteimg.com/obj/labis/86aa6a05cd95c0e78a73b431bb48408a" alt="金黄的银杏叶铺满地面的美景" class="rounded-xl shadow-lg w-full h-auto photo-hover cursor-pointer gallery-img" data-img="https://p3-search.byteimg.com/obj/labis/86aa6a05cd95c0e78a73b431bb48408a" data-caption="百年银杏道，金黄落叶如地毯般铺满路面">
+                        </div>
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold text-warm-700 mb-4">关于丹东银杏文化节</h3>
+                            <p class="mb-4 text-warm-800 leading-relaxed">
+                                每年深秋，丹东便化身为金色的童话世界。百年银杏大道上，金黄的叶子如蝴蝶般翩翩起舞，铺就出一条通往时光深处的金色地毯。
+                            </p>
+                            <p class="mb-6 text-warm-800 leading-relaxed">
+                                本届银杏文化节将为您呈现一场集视觉盛宴、文化体验、互动参与于一体的秋日庆典，让我们一同感受丹东独特的银杏魅力。
+                            </p>
+                            <div class="flex flex-wrap items-center gap-4 text-warm-700">
+                                <div class="flex items-center">
+                                    <i class="fa fa-calendar text-primary mr-2"></i>
+                                    <span>2025年10月25日-11月15日</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fa fa-map-marker text-primary mr-2"></i>
+                                    <span>丹东市银杏大道及周边</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 针对不同人群的活动 -->
+        <section id="activities" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-warm-800 mb-4">为您精心准备的活动</h2>
+                <p class="text-warm-600 max-w-2xl mx-auto">无论您是校友、学生还是社会各界朋友，都能在这里找到属于自己的乐趣</p>
+                <div class="w-24 h-1 bg-primary mx-auto rounded-full mt-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 在校校友 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://p3-search.byteimg.com/obj/labis/5448acc1619f72950bdee5969c6fd4ad" alt="校友在银杏树下聚会交流" class="w-full h-full object-cover transition-all duration-700 hover:scale-110 cursor-pointer gallery-img" data-img="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/662ea7182cc74e418bef2e2babe5eca6~tplv-a9rns2rl98-image.image?rcl=2025091611285898FE78BF0046092D31D2&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1758598142&amp;x-signature=FZdIbXrVZZc%2BnGleRRh6cRvx7xA%3D" data-caption="校友在金黄的银杏树下重温校园时光">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                                <i class="fa fa-graduation-cap text-primary text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-warm-800">致校友们</h3>
+                        </div>
+                        <ul class="space-y-3 text-warm-700">
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>校园银杏摄影展与校友作品征集</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>校友专场导览与座谈会</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>校园记忆分享会与联谊活动</span>
+                            </li>
+                        </ul>
+                        <a href="#register" class="inline-block mt-6 text-primary font-medium hover:text-warm-700 transition-colors">
+                            校友专属报名 <i class="fa fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 中小学生 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://p3-search.byteimg.com/obj/pgc-image/e76f41e22a9644a19dfc8846fe72b277" alt="孩子们在银杏树下进行手工活动" class="w-full h-full object-cover transition-all duration-700 hover:scale-110 cursor-pointer gallery-img" data-img="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/db12c9f78e9d4bf1bdf25648c4fba612~tplv-a9rns2rl98-image.image?rcl=2025091611282198FE78BF0046092D194D&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1758598105&amp;x-signature=hFQ%2BW630fza96bHYhpjxU26wJh4%3D" data-caption="孩子们用银杏叶创作手工作品">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                                <i class="fa fa-child text-primary text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-warm-800">致同学们</h3>
+                        </div>
+                        <ul class="space-y-3 text-warm-700">
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>银杏科普小课堂与自然探索</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>银杏叶手工创作比赛</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>校园小记者摄影采风活动</span>
+                            </li>
+                        </ul>
+                        <a href="#register" class="inline-block mt-6 text-primary font-medium hover:text-warm-700 transition-colors">
+                            学生活动报名 <i class="fa fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 社会人群 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://p3-search.byteimg.com/obj/labis/e87e902e84f0a9e58013ff6479e5d490" alt="市民在金黄的银杏大道上散步赏景" class="w-full h-full object-cover transition-all duration-700 hover:scale-110 cursor-pointer gallery-img" data-img="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/79aa99bbb6b8438587f785e1447999d5~tplv-a9rns2rl98-image.image?rcl=2025091611283998FE78BF0046092D248D&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1758598123&amp;x-signature=NEDUKJJkE0f1NRE5ruzgCZt0TYg%3D" data-caption="市民在金黄的银杏大道上漫步赏景">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                                <i class="fa fa-users text-primary text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-warm-800">致市民朋友们</h3>
+                        </div>
+                        <ul class="space-y-3 text-warm-700">
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>银杏文化主题市集与美食节</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>摄影大赛与最美银杏评选</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                <span>秋日健康跑与户外瑜伽活动</span>
+                            </li>
+                        </ul>
+                        <a href="#register" class="inline-block mt-6 text-primary font-medium hover:text-warm-700 transition-colors">
+                            市民活动报名 <i class="fa fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 银杏文化掠影展示区 - 可交互查看 -->
+        <section id="gallery" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-warm-800 mb-4">银杏文化节掠影</h2>
+                <p class="text-warm-600 max-w-2xl mx-auto">点击图片可放大查看，感受银杏节的文化魅力与欢乐氛围</p>
+                <div class="w-24 h-1 bg-primary mx-auto rounded-full mt-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="photo-container rounded-xl overflow-hidden shadow-md photo-hover relative">
+                    <img src="https://p3-search.byteimg.com/obj/labis/52a3860b1f8846c3a174aa69d4b48046" alt="金黄的银杏叶特写，阳光透过叶片呈现出透明质感" class="w-full h-64 object-cover cursor-pointer gallery-img" data-img="https://p3-search.byteimg.com/obj/labis/52a3860b1f8846c3a174aa69d4b48046" data-caption="阳光下的银杏叶，呈现出金黄透明的质感">
+                    <div class="img-caption absolute bottom-0 left-0 right-0 bg-black/60 text-white p-3 text-sm">
+                        阳光下的银杏叶，呈现出金黄透明的质感
+                    </div>
+                </div>
+                <div class="photo-container rounded-xl overflow-hidden shadow-md photo-hover relative">
+                    <img src="https://p3-search.byteimg.com/obj/labis/28d39716f25ff7c65abc00467976111d" alt="银杏文化节书法展示活动，艺术家在银杏叶形状的宣纸上创作" class="w-full h-64 object-cover cursor-pointer gallery-img" data-img="https://p3-search.byteimg.com/obj/labis/28d39716f25ff7c65abc00467976111d" data-caption="艺术家在银杏文化节现场创作银杏主题书法">
+                    <div class="img-caption absolute bottom-0 left-0 right-0 bg-black/60 text-white p-3 text-sm">
+                        艺术家在银杏文化节现场创作银杏主题书法
+                    </div>
+                </div>
+                <div class="photo-container rounded-xl overflow-hidden shadow-md photo-hover relative">
+                    <img src="https://p3-search.byteimg.com/obj/labis/a9acb2ade11254e93be7935092221b28" alt="银杏文化节传统民乐表演，演员在金黄的银杏树下演奏" class="w-full h-64 object-cover cursor-pointer gallery-img" data-img="https://p3-search.byteimg.com/obj/labis/a9acb2ade11254e93be7935092221b28" data-caption="银杏树下的传统民乐表演，古色古香">
+                    <div class="img-caption absolute bottom-0 left-0 right-0 bg-black/60 text-white p-3 text-sm">
+                        银杏树下的传统民乐表演，古色古香
+                    </div>
+                </div>
+                <div class="photo-container rounded-xl overflow-hidden shadow-md photo-hover relative">
+                    <img src="https://p3-search.byteimg.com/obj/pgc-image/2971481ac7814731a7cce8c3978bee4d" alt="银杏文化节市集，展示各种银杏主题手工艺品和美食" class="w-full h-64 object-cover cursor-pointer gallery-img" data-img="https://p3-search.byteimg.com/obj/pgc-image/2971481ac7814731a7cce8c3978bee4d" data-caption="银杏文化节市集，各类特色手工艺品琳琅满目">
+                    <div class="img-caption absolute bottom-0 left-0 right-0 bg-black/60 text-white p-3 text-sm">
+                        银杏文化节市集，各类特色手工艺品琳琅满目
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 大型特色银杏景观 -->
+            <div class="mt-10 rounded-2xl overflow-hidden shadow-xl photo-container relative">
+                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/91a4a4f5b8ab4306b2a783975015922b~tplv-a9rns2rl98-image.image?rcl=20250918102016D65CCD4CFE04A2AE6854&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1758766819&amp;x-signature=cJMqT%2BUVHdhTmwxM0KByzIj5oHU%3D" alt="丹东标志性的百年银杏古树群，树下有身着传统服饰的表演者" class="w-full h-64 md:h-80 object-cover photo-hover cursor-pointer gallery-img" data-img="https://picsum.photos/id/1058/1600/400" data-caption="百年银杏古树群与传统民俗表演">
+                <div class="img-caption absolute bottom-0 left-0 right-0 bg-black/60 text-white p-4">
+                    百年银杏古树群与传统民俗表演，展现深厚文化底蕴
+                </div>
+            </div>
+            
+            <!-- 文化体验活动图片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div class="photo-container rounded-xl overflow-hidden shadow-md photo-hover relative">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/09d63d9856f246e0b06d362bb0c19d55~tplv-a9rns2rl98-image.image?rcl=2025091810223540E485318E7B66BFC334&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1758766957&amp;x-signature=%2BRxNzlzbQuHg%2FJr%2FF6NS4KmR1AY%3D" alt="游客参与银杏茶制作体验" class="w-full h-64 object-cover cursor-pointer gallery-img" data-img="https://picsum.photos/id/1063/800/500" data-caption="游客参与银杏茶制作体验，了解传统工艺">
+                    <div class="img-caption absolute bottom-0 left-0 right-0 bg-black/60 text-white p-3 text-sm">
+                        游客参与银杏茶制作体验，了解传统工艺
+                    </div>
+                </div>
+                <div class="photo-container rounded-xl overflow-hidden shadow-md photo-hover relative">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/07abf85873ca40b2aef829357919efb4~tplv-a9rns2rl98-image.image?rcl=20250918102045D65CCD4CFE04A2AE705F&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1758766850&amp;x-signature=ZsBMnOvoi5W4MkbRfzLwcEgCCKI%3D" alt="银杏文化节摄影比赛获奖作品展览" class="w-full h-64 object-cover cursor-pointer gallery-img" data-img="https://picsum.photos/id/1064/800/500" data-caption="银杏文化节摄影比赛获奖作品展览">
+                    <div class="img-caption absolute bottom-0 left-0 right-0 bg-black/60 text-white p-3 text-sm">
+                        银杏文化节摄影比赛获奖作品展览
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 照片查看器弹窗 -->
+        <div id="photo-viewer" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+            <button id="close-viewer" class="absolute top-6 right-6 text-white text-3xl hover:text-primary transition-colors">
+                <i class="fa fa-times"></i>
+            </button>
+            <button id="prev-img" class="absolute left-6 top-1/2 transform -translate-y-1/2 text-white text-4xl hover:text-primary transition-colors">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+            <button id="next-img" class="absolute right-6 top-1/2 transform -translate-y-1/2 text-white text-4xl hover:text-primary transition-colors">
+                <i class="fa fa-chevron-right"></i>
+            </button>
+            <div class="max-w-5xl w-full max-h-[80vh] flex flex-col items-center justify-center cursor-grab active:cursor-grabbing" id="viewer-content">
+                <img src="" alt="银杏美景大图" id="viewer-img" class="max-w-full max-h-[70vh] object-contain">
+                <div id="viewer-caption" class="text-white mt-4 text-center max-w-2xl px-4"></div>
+            </div>
+        </div>
+        
+        <!-- 互动问答区 -->
+        <section class="mb-20 bg-white rounded-2xl shadow-xl p-8 md:p-12">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-warm-800 mb-4">银杏文化知识小问答</h2>
+                <p class="text-warm-600 max-w-2xl mx-auto">测试一下您对银杏文化的了解，答对有惊喜哦！</p>
+                <div class="w-24 h-1 bg-primary mx-auto rounded-full mt-4"></div>
+            </div>
+            
+            <div class="max-w-2xl mx-auto" id="quiz-container">
+                <div class="mb-8" id="quiz-question">
+                    <h3 class="text-xl font-semibold mb-4 text-warm-800">银杏树在我国文化中象征着什么？</h3>
+                    <div class="space-y-3" id="quiz-options">
+                        <div class="quiz-option p-4 border border-warm-200 rounded-lg cursor-pointer" data-correct="false">
+                            爱情与浪漫
+                        </div>
+                        <div class="quiz-option p-4 border border-warm-200 rounded-lg cursor-pointer" data-correct="true">
+                            长寿与坚韧
+                        </div>
+                        <div class="quiz-option p-4 border border-warm-200 rounded-lg cursor-pointer" data-correct="false">
+                            财富与繁荣
+                        </div>
+                        <div class="quiz-option p-4 border border-warm-200 rounded-lg cursor-pointer" data-correct="false">
+                            智慧与学问
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="quiz-result" class="hidden text-center p-6 rounded-lg">
+                    <div class="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-check text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-warm-800 mb-2">回答正确！</h3>
+                    <p class="text-warm-600 mb-6">银杏树在中国文化中象征着长寿、坚韧和永恒，常被种植在寺庙、庭院中，寓意吉祥长寿。</p>
+                    <button id="next-question" class="bg-primary hover:bg-warm-600 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                        下一题
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 活动亮点 -->
+        <section class="mb-20 bg-warm-200/30 rounded-2xl p-8 md:p-12">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-warm-800 mb-4">文化节亮点</h2>
+                <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                        <i class="fa fa-camera text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-warm-800">摄影大赛</h3>
+                    <p class="text-warm-600">捕捉银杏之美，记录金色瞬间，赢取丰厚奖品</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                        <i class="fa fa-cutlery text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-warm-800">美食盛宴</h3>
+                    <p class="text-warm-600">品尝秋季特色美食，感受丹东饮食文化</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                        <i class="fa fa-music text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-warm-800">文艺演出</h3>
+                    <p class="text-warm-600">秋日露天音乐会，银杏树下的艺术盛宴</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                        <i class="fa fa-book text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-warm-800">文化展览</h3>
+                    <p class="text-warm-600">银杏主题书画展，感受传统文化魅力</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 报名表单 -->
+        <section id="register" class="mb-16">
+            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/2 bg-primary p-8 text-white flex flex-col justify-center">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-6">立即报名</h2>
+                        <p class="mb-6 opacity-90">填写右侧表单，预定您的金色之旅。我们期待与您在金黄的银杏树下相遇。</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i class="fa fa-info-circle mr-3"></i>
+                                <span>报名截止：2025年10月20日</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa fa-phone mr-3"></i>
+                                <span>咨询电话：0415-3789102</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa fa-envelope mr-3"></i>
+                                <span>网址：https://www.liaodongu.edu.cn</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 p-8">
+                        <form id="registration-form" class="space-y-5">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-warm-700 mb-1">姓名</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border border-warm-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" placeholder="请输入您的姓名" required="">
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-warm-700 mb-1">手机号码</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-2 border border-warm-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" placeholder="请输入您的手机号码" required="">
+                            </div>
+                            
+                            <div>
+                                <label for="category" class="block text-sm font-medium text-warm-700 mb-1">参与身份</label>
+                                <select id="category" class="w-full px-4 py-2 border border-warm-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" required="">
+                                    <option value="">请选择您的身份</option>
+                                    <option value="alumni">在校校友</option>
+                                    <option value="student">中小学生</option>
+                                    <option value="public">社会人士</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-warm-700 mb-1">感兴趣的活动（可多选）</label>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <label class="flex items-center space-x-2 p-2 border border-warm-200 rounded hover:bg-warm-100 cursor-pointer">
+                                        <input type="checkbox" name="activities" value="photography" class="text-primary focus:ring-primary">
+                                        <span>摄影大赛</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 p-2 border border-warm-200 rounded hover:bg-warm-100 cursor-pointer">
+                                        <input type="checkbox" name="activities" value="food" class="text-primary focus:ring-primary">
+                                        <span>美食盛宴</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 p-2 border border-warm-200 rounded hover:bg-warm-100 cursor-pointer">
+                                        <input type="checkbox" name="activities" value="performance" class="text-primary focus:ring-primary">
+                                        <span>文艺演出</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 p-2 border border-warm-200 rounded hover:bg-warm-100 cursor-pointer">
+                                        <input type="checkbox" name="activities" value="exhibition" class="text-primary focus:ring-primary">
+                                        <span>文化展览</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-primary hover:bg-warm-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
+                                提交报名
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 交通信息 -->
+        <section class="mb-16">
+            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-warm-800 mb-2">交通指南</h2>
+                    <p class="text-warm-600">如何到达银杏文化节主会场</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-5 border border-warm-200 rounded-xl hover:bg-warm-100 transition-colors transform hover:-translate-y-1 duration-300">
+                        <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fa fa-bus text-primary text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2 text-warm-800">公共交通</h3>
+                        <p class="text-sm text-warm-600">乘坐1路、3路、4路、12路公交车至银杏大道站下车即可到达</p>
+                    </div>
+                    
+                    <div class="text-center p-5 border border-warm-200 rounded-xl hover:bg-warm-100 transition-colors transform hover:-translate-y-1 duration-300">
+                        <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fa fa-car text-primary text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2 text-warm-800">自驾前往</h3>
+                        <p class="text-sm text-warm-600">导航至"丹东市银杏大道"，周边设有临时停车场</p>
+                    </div>
+                    
+                    <div class="text-center p-5 border border-warm-200 rounded-xl hover:bg-warm-100 transition-colors transform hover:-translate-y-1 duration-300">
+                        <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fa fa-bicycle text-primary text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2 text-warm-800">绿色出行</h3>
+                        <p class="text-sm text-warm-600">周边设有共享单车停放点，骑行更环保便捷</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="bg-warm-800 text-white py-12 relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <h3 class="text-xl font-bold mb-2">丹东银杏文化节</h3>
+                    <p class="text-warm-200/80">金色盛宴 · 诗意丹东</p>
+                </div>
+                
+                <div class="flex space-x-6 mb-6 md:mb-0">
+                    <a href="#" class="w-10 h-10 rounded-full bg-warm-700 flex items-center justify-center hover:bg-primary transition-colors transform hover:scale-110 duration-300">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-warm-700 flex items-center justify-center hover:bg-primary transition-colors transform hover:scale-110 duration-300">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-warm-700 flex items-center justify-center hover:bg-primary transition-colors transform hover:scale-110 duration-300">
+                        <i class="fa fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-warm-700 flex items-center justify-center hover:bg-primary transition-colors transform hover:scale-110 duration-300">
+                        <i class="fa fa-youtube-play"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-warm-700 mt-8 pt-8 text-center text-warm-200/60 text-sm">
+                <p>© 2025 丹东银杏文化节组委会 版权所有</p>
+                <p class="mt-2">联系地址：丹东市振兴区银杏大道1号 | 咨询电话：0415-3789102</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 报名成功弹窗 -->
+    <div id="success-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-check text-secondary text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-warm-800 mb-2">报名成功！</h3>
+                <p class="text-warm-600 mb-6">感谢您的参与，我们已收到您的报名信息，后续详情将通过短信通知您。</p>
+                <button id="close-modal" class="bg-primary hover:bg-warm-600 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 存储所有图片URL和说明
+        const galleryImages = [];
+        let currentImageIndex = 0;
+        
+        // 创建飘落的银杏叶动画 - 可与鼠标交互
+        function createGinkgoLeaves() {
+            const container = document.getElementById('ginkgo-leaves');
+            const colors = ['#E6A65D', '#FFCB4D', '#FFD980', '#E6A600'];
+            const count = 30; // 叶子数量
+            
+            for (let i = 0; i < count; i++) {
+                const leaf = document.createElement('div');
+                
+                // 随机样式
+                const size = Math.random() * 20 + 10;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const left = Math.random() * 100;
+                const delay = Math.random() * 10;
+                const duration = Math.random() * 10 + 10;
+                const rotation = Math.random() * 360;
+                
+                // 设置样式
+                leaf.style.position = 'absolute';
+                leaf.style.width = `${size}px`;
+                leaf.style.height = `${size}px`;
+                leaf.style.backgroundColor = color;
+                leaf.style.borderRadius = '0 100% 0 100%';
+                leaf.style.transform = `rotate(${rotation}deg)`;
+                leaf.style.left = `${left}%`;
+                leaf.style.top = '-20px';
+                leaf.style.opacity = Math.random() * 0.5 + 0.3;
+                leaf.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                leaf.style.animationFillMode = 'both';
+                leaf.style.pointerEvents = 'auto'; // 允许交互
+                leaf.classList.add('cursor-pointer');
+                
+                // 添加点击交互
+                leaf.addEventListener('click', function() {
+                    this.style.opacity = '0';
+                    setTimeout(() => {
+                        this.remove();
+                        // 点击后添加新叶子
+                        createGinkgoLeaves(1);
+                    }, 300);
+                });
+                
+                container.appendChild(leaf);
+            }
+        }
+        
+        // 初始化倒计时
+        function initCountdown() {
+            // 文化节开始日期：2023年10月25日
+            const festivalDate = new Date(2023, 9, 25, 0, 0, 0);
+            
+            function updateCountdown() {
+                const now = new Date();
+                const diff = festivalDate - now;
+                
+                // 如果已经过了节日日期，显示0
+                if (diff <= 0) {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                    return;
+                }
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                // 补零
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            // 初始更新一次
+            updateCountdown();
+            // 每秒更新一次
+            setInterval(updateCountdown, 1000);
+        }
+        
+        // 初始化照片查看器
+        function initPhotoViewer() {
+            const viewer = document.getElementById('photo-viewer');
+            const viewerImg = document.getElementById('viewer-img');
+            const viewerCaption = document.getElementById('viewer-caption');
+            const closeViewer = document.getElementById('close-viewer');
+            const prevImg = document.getElementById('prev-img');
+            const nextImg = document.getElementById('next-img');
+            const galleryImagesElements = document.querySelectorAll('.gallery-img');
+            
+            // 收集所有图片URL和说明
+            galleryImagesElements.forEach((img, index) => {
+                galleryImages.push({
+                    url: img.getAttribute('data-img'),
+                    caption: img.getAttribute('data-caption') || img.getAttribute('alt')
+                });
+                
+                // 为每张图片添加点击事件
+                img.addEventListener('click', function() {
+                    const imgUrl = this.getAttribute('data-img');
+                    // 找到当前图片索引
+                    currentImageIndex = galleryImages.findIndex(item => item.url === imgUrl);
+                    viewerImg.setAttribute('src', imgUrl);
+                    viewerImg.setAttribute('alt', this.getAttribute('alt'));
+                    viewerCaption.textContent = this.getAttribute('data-caption') || this.getAttribute('alt');
+                    viewer.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // 防止背景滚动
+                });
+            });
+            
+            // 关闭查看器
+            closeViewer.addEventListener('click', function() {
+                viewer.classList.remove('active');
+                document.body.style.overflow = ''; // 恢复滚动
+            });
+            
+            // 上一张图片
+            prevImg.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+                viewerImg.setAttribute('src', galleryImages[currentImageIndex].url);
+                viewerCaption.textContent = galleryImages[currentImageIndex].caption;
+            });
+            
+            // 下一张图片
+            nextImg.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+                viewerImg.setAttribute('src', galleryImages[currentImageIndex].url);
+                viewerCaption.textContent = galleryImages[currentImageIndex].caption;
+            });
+            
+            // 点击背景关闭
+            viewer.addEventListener('click', function(e) {
+                if (e.target === viewer) {
+                    viewer.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // 键盘导航
+            document.addEventListener('keydown', function(e) {
+                if (!viewer.classList.contains('active')) return;
+                
+                if (e.key === 'Escape') {
+                    viewer.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else if (e.key === 'ArrowLeft') {
+                    currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+                    viewerImg.setAttribute('src', galleryImages[currentImageIndex].url);
+                    viewerCaption.textContent = galleryImages[currentImageIndex].caption;
+                } else if (e.key === 'ArrowRight') {
+                    currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+                    viewerImg.setAttribute('src', galleryImages[currentImageIndex].url);
+                    viewerCaption.textContent = galleryImages[currentImageIndex].caption;
+                }
+            });
+        }
+        
+        // 初始化问答功能
+        function initQuiz() {
+            const questions = [
+                {
+                    question: "银杏树在我国文化中象征着什么？",
+                    options: [
+                        { text: "爱情与浪漫", correct: false },
+                        { text: "长寿与坚韧", correct: true },
+                        { text: "财富与繁荣", correct: false },
+                        { text: "智慧与学问", correct: false }
+                    ],
+                    explanation: "银杏树在中国文化中象征着长寿、坚韧和永恒，常被种植在寺庙、庭院中，寓意吉祥长寿。"
+                },
+                {
+                    question: "以下哪项是丹东银杏文化节的传统活动？",
+                    options: [
+                        { text: "银杏叶书法创作", correct: true },
+                        { text: "樱花观赏会", correct: false },
+                        { text: "荷花灯祈福", correct: false },
+                        { text: "菊花展", correct: false }
+                    ],
+                    explanation: "银杏叶书法创作是丹东银杏文化节的特色活动，艺术家们在特制的银杏叶形状宣纸上进行创作，融合自然与艺术。"
+                },
+                {
+                    question: "银杏树为什么被称为'活化石'？",
+                    options: [
+                        { text: "因为树形优美", correct: false },
+                        { text: "因为可以存活很久", correct: false },
+                        { text: "因为与远古时期的银杏化石形态几乎相同", correct: true },
+                        { text: "因为具有很高的药用价值", correct: false }
+                    ],
+                    explanation: "银杏树被称为'活化石'是因为其物种在地球上已经存在超过2亿年，且现代银杏树与远古时期的银杏化石在形态上几乎没有变化。"
+                }
+            ];
+            
+            let currentQuestionIndex = 0;
+            
+            const questionElement = document.querySelector('#quiz-question h3');
+            const optionsContainer = document.getElementById('quiz-options');
+            const quizResult = document.getElementById('quiz-result');
+            const resultExplanation = quizResult.querySelector('p');
+            const nextQuestionBtn = document.getElementById('next-question');
+            
+            // 加载问题
+            function loadQuestion(index) {
+                const question = questions[index];
+                questionElement.textContent = question.question;
+                optionsContainer.innerHTML = '';
+                
+                // 清空之前的样式
+                quizResult.classList.add('hidden');
+                
+                // 创建选项
+                question.options.forEach(option => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'quiz-option p-4 border border-warm-200 rounded-lg cursor-pointer';
+                    optionElement.textContent = option.text;
+                    optionElement.setAttribute('data-correct', option.correct);
+                    
+                    // 添加点击事件
+                    optionElement.addEventListener('click', function() {
+                        // 禁用所有选项
+                        document.querySelectorAll('.quiz-option').forEach(opt => {
+                            opt.classList.remove('cursor-pointer');
+                            
+                            // 显示正确和错误的选项
+                            if (opt.getAttribute('data-correct') === 'true') {
+                                opt.classList.add('correct');
+                            } else if (opt === this) {
+                                opt.classList.add('incorrect');
+                            }
+                        });
+                        
+                        // 显示结果
+                        resultExplanation.textContent = question.explanation;
+                        setTimeout(() => {
+                            quizResult.classList.remove('hidden');
+                        }, 1000);
+                    });
+                    
+                    optionsContainer.appendChild(optionElement);
+                });
+            }
+            
+            // 下一题按钮
+            nextQuestionBtn.addEventListener('click', function() {
+                currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+                loadQuestion(currentQuestionIndex);
+            });
+            
+            // 初始加载第一题
+            loadQuestion(currentQuestionIndex);
+        }
+        
+        // 表单提交处理
+        function handleFormSubmit() {
+            const form = document.getElementById('registration-form');
+            const modal = document.getElementById('success-modal');
+            const modalContent = document.getElementById('modal-content');
+            const closeModal = document.getElementById('close-modal');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 显示弹窗动画
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+                
+                // 重置表单
+                form.reset();
+            });
+            
+            // 关闭弹窗
+            closeModal.addEventListener('click', function() {
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            });
+        }
+        
+        // 移动端菜单
+        function initMobileMenu() {
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                
+                // 切换图标
+                const icon = menuButton.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                }
+            });
+            
+            // 点击菜单项后关闭菜单
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    const icon = menuButton.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+        }
+        
+        // 导航栏滚动效果
+        function initNavScrollEffect() {
+            const nav = document.getElementById('main-nav');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    nav.classList.add('py-2', 'shadow-lg');
+                    nav.classList.remove('py-4', 'shadow-md');
+                } else {
+                    nav.classList.add('py-4', 'shadow-md');
+                    nav.classList.remove('py-2', 'shadow-lg');
+                }
+            });
+        }
+        
+        // 图片加载动画
+        function addImageLoadAnimations() {
+            const images = document.querySelectorAll('img');
+            
+            images.forEach(img => {
+                // 初始状态
+                img.style.opacity = '0';
+                img.style.transition = 'opacity 0.8s ease';
+                
+                // 加载完成后显示
+                img.onload = function() {
+                    img.style.opacity = '1';
+                }
+                
+                // 如果图片已经缓存
+                if (img.complete) {
+                    img.style.opacity = '1';
+                }
+            });
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            createGinkgoLeaves();
+            initCountdown();
+            initPhotoViewer();
+            initQuiz();
+            handleFormSubmit();
+            initMobileMenu();
+            initNavScrollEffect();
+            addImageLoadAnimations();
+            
+            // 添加滚动动画效果
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('section');
+                
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('opacity-100', 'translate-y-0');
+                        element.classList.remove('opacity-0', 'translate-y-10');
+                    }
+                });
+            };
+            
+            // 初始化元素样式
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            });
+            
+            // 初始检查和滚动监听
+            animateOnScroll();
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+
+
+    </body></html>
